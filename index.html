@@ -50,12 +50,23 @@
         }
         .like-button {
             margin-top: 15px;
-            color: white;
             font-size: 20px;
             cursor: pointer;
+            background-color: #e91e63;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s;
+        }
+        .like-button:hover {
+            background-color: #d81b60;
         }
         .like-button.liked {
-            color: #e91e63;
+            background-color: #c2185b;
         }
     </style>
 </head>
@@ -70,9 +81,9 @@
             <a id="twitterLink" href="#" target="_blank"><i class="fab fa-twitter"></i></a>
             <a id="discordLink" href="#" target="_blank"><i class="fab fa-discord"></i></a>
         </div>
-        <div class="like-button" onclick="toggleLike()">
+        <button class="like-button" onclick="toggleLike()">
             <i id="likeIcon" class="fas fa-heart"></i> <span id="likeCount">0</span>
-        </div>
+        </button>
     </div><script>
     // Cargar valores desde localStorage
     const links = ['tiktokLink', 'githubLink', 'twitterLink', 'discordLink'];
