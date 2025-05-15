@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Redes Sociales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,9 +67,6 @@
         .like-button:hover {
             background-color: #d81b60;
         }
-        .like-button.liked {
-            background-color: #c2185b;
-        }
     </style>
 </head>
 <body>
@@ -85,36 +84,31 @@
             <i id="likeIcon" class="fas fa-heart"></i> <span id="likeCount">0</span>
         </button>
     </div><script>
-    // Cargar valores desde localStorage
-    const links = ['tiktokLink', 'githubLink', 'twitterLink', 'discordLink'];
-    const image = localStorage.getItem('profileImage');
-    if (image) document.getElementById('profileImage').src = image;
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBQUSeE8IJHcuSX_n2ehnYhwGRvnYNIGmA",
+        authDomain: "tiktokperfil-38c8e.firebaseapp.com",
+        databaseURL: "https://tiktokperfil-38c8e-default-rtdb.firebaseio.com",
+        projectId: "tiktokperfil-38c8e",
+        storageBucket: "tiktokperfil-38c8e.firebasestorage.app",
+        messagingSenderId: "1014198546798",
+        appId: "1:1014198546798:web:37169ab526d5d5d3e7d17f",
+        measurementId: "G-0TKW3PTMPN"
+    };
 
-    links.forEach(link => {
-        const url = localStorage.getItem(link);
-        if (url) document.getElementById(link).href = url;
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const likeRef = db.ref('likes');
+
+    likeRef.on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        document.getElementById('likeCount').textContent = count;
     });
 
-    // Sistema de Likes
-    let likeCount = localStorage.getItem('likeCount') || 0;
-    let liked = localStorage.getItem('liked') === 'true';
-
-    document.getElementById('likeCount').textContent = likeCount;
-    if (liked) {
-        document.getElementById('likeIcon').classList.add('liked');
-    }
-
     function toggleLike() {
-        liked = !liked;
-        const icon = document.getElementById('likeIcon');
-        const count = document.getElementById('likeCount');
-        icon.classList.toggle('liked');
-        likeCount = liked ? ++likeCount : --likeCount;
-        count.textContent = likeCount;
-
-        // Guardar en localStorage
-        localStorage.setItem('likeCount', likeCount);
-        localStorage.setItem('liked', liked);
+        likeRef.transaction((currentLikes) => {
+            return (currentLikes || 0) + 1;
+        });
     }
 </script>
 
