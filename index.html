@@ -48,19 +48,64 @@
         .social-icons a:hover {
             color: #6272a4;
         }
+        .like-button {
+            margin-top: 15px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .like-button.liked {
+            color: #e91e63;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://via.placeholder.com/150" alt="Foto de Perfil">
+        <img id="profileImage" src="https://via.placeholder.com/150" alt="Foto de Perfil">
         <h1>Mis Redes Sociales</h1>
         <p>Me gustan los videojuegos y programar</p>
         <div class="social-icons">
-            <a href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+            <a id="tiktokLink" href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a id="githubLink" href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a id="twitterLink" href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a id="discordLink" href="#" target="_blank"><i class="fab fa-discord"></i></a>
         </div>
-    </div>
+        <div class="like-button" onclick="toggleLike()">
+            <i id="likeIcon" class="fas fa-heart"></i> <span id="likeCount">0</span>
+        </div>
+    </div><script>
+    // Cargar valores desde localStorage
+    const links = ['tiktokLink', 'githubLink', 'twitterLink', 'discordLink'];
+    const image = localStorage.getItem('profileImage');
+    if (image) document.getElementById('profileImage').src = image;
+
+    links.forEach(link => {
+        const url = localStorage.getItem(link);
+        if (url) document.getElementById(link).href = url;
+    });
+
+    // Sistema de Likes
+    let likeCount = localStorage.getItem('likeCount') || 0;
+    let liked = localStorage.getItem('liked') === 'true';
+
+    document.getElementById('likeCount').textContent = likeCount;
+    if (liked) {
+        document.getElementById('likeIcon').classList.add('liked');
+    }
+
+    function toggleLike() {
+        liked = !liked;
+        const icon = document.getElementById('likeIcon');
+        const count = document.getElementById('likeCount');
+        icon.classList.toggle('liked');
+        likeCount = liked ? ++likeCount : --likeCount;
+        count.textContent = likeCount;
+
+        // Guardar en localStorage
+        localStorage.setItem('likeCount', likeCount);
+        localStorage.setItem('liked', liked);
+    }
+</script>
+
 </body>
 </html>
